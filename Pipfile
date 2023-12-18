@@ -4,12 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-openai
-python-dotenv
-langchain
-bs4
-tiktoken
-streamlit
+openai == "1.5.0"
+python-dotenv == "1.0.0"
+langchain == "0.0.350"
+streamlit == "1.29.0"
 
 [dev-packages]
 
