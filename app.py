@@ -14,7 +14,12 @@ if uploaded_file is not None:
     st.write("Original Data:")
     st.write(df)
 
+    client_name = st.text_input("Client Name:", "Tullamore Dew")
+    industry_type = st.text_input("Industry Type:", "irish whiskey")
+    format = st.text_input("Format:", "YouTube")
+
     # Data manipulations
+
     col_to_pivot = st.multiselect("Select a column to pivot:", df.columns)
     pivot_values = st.multiselect("Select a column to aggregate:", df.columns)
     calculate_ctr = st.checkbox("Calculate CTR?")
@@ -150,12 +155,11 @@ if uploaded_file is not None:
 
             report = " ".join(best_vals)
 
-            @st.cache_data
             def run_report():
                 # Call the long-running function with a spinner
 
                 new_report = run_grammar_chain(
-                    report, "Tullamore Dew", "irish whiskey", format="YouTube")
+                    report, client_name, industry_type, format=format)
                 return new_report
 
             with st.spinner(text='In progress...'):
