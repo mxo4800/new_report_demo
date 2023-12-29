@@ -97,7 +97,7 @@ def create_rewrite_chain(llm=llm):
 
 def run_rewrite_chain(report, llm=llm):
 
-    rewrite_chain = create_rewrite_chain(report, llm=llm)
+    rewrite_chain = create_rewrite_chain(llm=llm)
 
     rewritten_report = rewrite_chain.run(report)
 
