@@ -160,7 +160,11 @@ if uploaded_file is not None:
 
                 new_report = run_grammar_chain(
                     report, client_name, industry_type, format=format)
-                return new_report
+                
+                rewrite_report = run_rewrite_chain(new_report)
+
+
+                return rewrite_report
 
             with st.spinner(text='In progress...'):
                 new_report = run_report()
@@ -169,19 +173,21 @@ if uploaded_file is not None:
             st.write("A.I Report:")
             st.write(new_report)
 
-        @st.cache_data
-        def convert_df(df):
-            # IMPORTANT: Cache the conversion to prevent computation on every rerun
-            return df.to_csv().encode('utf-8')
 
-        csv = convert_df(df)
 
-        st.download_button(
-            label="Download data as CSV",
-            data=csv,
-            file_name='large_df.csv',
-            mime='text/csv',
-        )
+            @st.cache_data
+            def convert_df(df):
+                # IMPORTANT: Cache the conversion to prevent computation on every rerun
+                return df.to_csv().encode('utf-8')
+
+            csv = convert_df(df)
+
+            st.download_button(
+                label="Download data as CSV",
+                data=csv,
+                file_name='large_df.csv',
+                mime='text/csv',
+            )
         # save dataframe report to csv and let user download
 
     # Add saving functionality if needed

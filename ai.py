@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 # load_dotenv()
 
 openai.api_key = st.secrets["OPENAI_API_KEY"]
+# openai.ap_key = os.environ(["OPENAI_API_KEY"])
 
 
 llm = ChatOpenAI(model_name='gpt-4', max_tokens=4000, temperature=0)
@@ -63,24 +64,21 @@ def run_grammar_chain(report, client_name, industry_type, format="YouTube", llm=
     return generated_report
 
 
-def create_rewrite_report(text):
+def create_rewrite_report():
 
-    template = f"""Hello ChatGPT, today I have a challenging and important task for you. We have an existing report, but we need it to be rewritten to match the style of a report that was created two weeks ago by an analyst. The goal is to maintain the content and data of the current report but adapt it to the stylistic nuances of the previous one.
-
-    First, please review the older report to understand its writing style. Pay close attention to the structure, tone, and the specific way information is presented in it.
-
-    Previous Report Style Reference:
-    {text}
-
-    Now, here is the report that needs to be rewritten:
-
-    Current Report:
+    template = """The following insight report describes the sucess of a current programmatic marketing campaign that buys ads on the internet for a client through the depictions of quantative and qualitative data.
+    Break down the insight report into actionable bullet points that highlights the sucess of the marketing campaign and tells the client how MiQ utilizes that data to make a buying optimization 
     
-    {{report}}
+    Example: 
+    
+    Insight report input: The Balvenie's programmatic advertising campaign has achieved impressive results across various metrics. Smartphones were the top-performing device type with over 14 million impressions and a click-through rate (CTR) of 0.20%, followed by tablets and connected TVs.
 
-    Your task is to rework this current report, ensuring that its content and data remain intact, but its style closely resembles that of the previous report. This includes matching the level of detail, tone, and the overall approach to presenting information. 
+    A.I Assistant output: - Smartphones is a top-performing device driving a 0.20% CTR. MiQ increased spend allocation to Smartphones to further drive performance
 
-    We value your assistance in maintaining a consistent and professional style in our reporting, adapting new information to established presentation standards."""
+    {report}
+    
+    
+    """
 
     prompt_template = PromptTemplate(
         input_variables=["report"], template=template)
@@ -88,19 +86,19 @@ def create_rewrite_report(text):
     return prompt_template
 
 
-def create_rewrite_chain(text, llm=llm):
+def create_rewrite_chain(llm=llm):
 
-    prompt_template = create_rewrite_report(text)
+    prompt_template = create_rewrite_report()
 
     rewrite_chain = LLMChain(llm=llm, prompt=prompt_template)
 
     return rewrite_chain
 
 
-def run_rewrite_chain(text, ai_report, llm=llm):
+def run_rewrite_chain(report, llm=llm):
 
-    rewrite_chain = create_rewrite_chain(text, llm=llm)
+    rewrite_chain = create_rewrite_chain(report, llm=llm)
 
-    rewritten_report = rewrite_chain.run(ai_report)
+    rewritten_report = rewrite_chain.run(report)
 
     return rewritten_report
